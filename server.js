@@ -1,28 +1,16 @@
 const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-
+const path = require('path');
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-let timer = 30;
-let lastResult = 'GREEN';
-
-setInterval(() => {
-    timer--;
-    if (timer < 0) {
-        timer = 30;
-        const colors = ['RED', 'GREEN', 'VIOLET'];
-        lastResult = colors[Math.floor(Math.random() * colors.length)];
-    }
-    io.emit('gameUpdate', { timer, lastResult });
-}, 1000);
-
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+module.exports = app;
