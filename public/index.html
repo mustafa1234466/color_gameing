@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>Color Game</title></head>
+<body>
+    <h1>Color Prediction Game</h1>
+    <h2 id="timer">Timer: 30</h2>
+    <h2 id="result">Result: --</h2>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on('gameUpdate', (data) => {
+            document.getElementById('timer').innerText = "Timer: " + data.timer;
+            document.getElementById('result').innerText = "Last Result: " + data.lastResult;
+        });
+    </script>
+</body>
+</html>
+
