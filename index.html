@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Prediction Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-container" class="card">
+        <h2>Color Game Login</h2>
+        <input type="text" id="username" placeholder="Enter your mobile/username">
+        <button onclick="loginUser()">Login / Register</button>
+    </div>
+
+    <div id="game-container" class="card" style="display: none;">
+        <div class="header">
+            <span>👤 <span id="display-user"></span></span>
+            <span class="wallet">💰 ₹<span id="wallet-balance">1000</span></span>
+        </div>
+
+        <div class="game-info">
+            <div>Period ID: <span id="period-id">2026082101</span></div>
+            <div class="timer-box">Time Left: <span id="timer">30</span>s</div>
+        </div>
+
+        <div class="bet-buttons">
+            <button class="btn green" onclick="openBetModal('Green')">Join Green</button>
+            <button class="btn violet" onclick="openBetModal('Violet')">Join Violet</button>
+            <button class="btn red" onclick="openBetModal('Red')">Join Red</button>
+        </div>
+
+        <div class="number-board">
+            <button class="num-btn" onclick="openBetModal('0')">0</button>
+            <button class="num-btn" onclick="openBetModal('1')">1</button>
+            <button class="num-btn" onclick="openBetModal('2')">2</button>
+            <button class="num-btn" onclick="openBetModal('3')">3</button>
+            <button class="num-btn" onclick="openBetModal('4')">4</button>
+            <button class="num-btn" onclick="openBetModal('5')">5</button>
+            <button class="num-btn" onclick="openBetModal('6')">6</button>
+            <button class="num-btn" onclick="openBetModal('7')">7</button>
+            <button class="num-btn" onclick="openBetModal('8')">8</button>
+            <button class="num-btn" onclick="openBetModal('9')">9</button>
+        </div>
+
+        <div class="history-section">
+            <h3>Game History</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Number</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="bet-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Place Bet on <span id="selected-option"></span></h3>
+            <p>Enter Amount:</p>
+            <input type="number" id="bet-amount" value="10" min="10">
+            <div class="modal-buttons">
+                <button onclick="confirmBet()">Confirm</button>
+                <button onclick="closeModal()" class="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
