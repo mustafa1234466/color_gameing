@@ -4,72 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color Prediction Game</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; background: #0f172a; color: #fff; text-align: center; padding: 20px; }
+        .container { max-width: 400px; margin: auto; background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        h1 { color: #38bdf8; font-size: 24px; }
+        .timer { font-size: 20px; margin: 15px 0; color: #facc15; }
+        .result { font-size: 18px; margin: 15px 0; font-weight: bold; }
+        .btn-container { display: flex; justify-content: space-around; margin: 20px 0; }
+        button { padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
+        .btn-green { background: #22c55e; }
+        .btn-red { background: #ef4444; }
+        .btn-violet { background: #a855f7; }
+    </style>
 </head>
 <body>
-    <div id="login-container" class="card">
-        <h2>Color Game Login</h2>
-        <input type="text" id="username" placeholder="Enter your mobile/username">
-        <button onclick="loginUser()">Login / Register</button>
-    </div>
-
-    <div id="game-container" class="card" style="display: none;">
-        <div class="header">
-            <span>👤 <span id="display-user"></span></span>
-            <span class="wallet">💰 ₹<span id="wallet-balance">1000</span></span>
-        </div>
-
-        <div class="game-info">
-            <div>Period ID: <span id="period-id">2026082101</span></div>
-            <div class="timer-box">Time Left: <span id="timer">30</span>s</div>
-        </div>
-
-        <div class="bet-buttons">
-            <button class="btn green" onclick="openBetModal('Green')">Join Green</button>
-            <button class="btn violet" onclick="openBetModal('Violet')">Join Violet</button>
-            <button class="btn red" onclick="openBetModal('Red')">Join Red</button>
-        </div>
-
-        <div class="number-board">
-            <button class="num-btn" onclick="openBetModal('0')">0</button>
-            <button class="num-btn" onclick="openBetModal('1')">1</button>
-            <button class="num-btn" onclick="openBetModal('2')">2</button>
-            <button class="num-btn" onclick="openBetModal('3')">3</button>
-            <button class="num-btn" onclick="openBetModal('4')">4</button>
-            <button class="num-btn" onclick="openBetModal('5')">5</button>
-            <button class="num-btn" onclick="openBetModal('6')">6</button>
-            <button class="num-btn" onclick="openBetModal('7')">7</button>
-            <button class="num-btn" onclick="openBetModal('8')">8</button>
-            <button class="num-btn" onclick="openBetModal('9')">9</button>
-        </div>
-
-        <div class="history-section">
-            <h3>Game History</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Period</th>
-                        <th>Number</th>
-                        <th>Result</th>
-                    </tr>
-                </thead>
-                <tbody id="history-body"></tbody>
-            </table>
+    <div class="container">
+        <h1>Color Prediction Game</h1>
+        <div class="timer" id="timer">Timer: 30s</div>
+        <div class="result" id="result">Result: --</div>
+        <div class="btn-container">
+            <button class="btn-green" onclick="bet('Green')">Green</button>
+            <button class="btn-violet" onclick="bet('Violet')">Violet</button>
+            <button class="btn-red" onclick="bet('Red')">Red</button>
         </div>
     </div>
+    <script>
+        let timeLeft = 30;
+        const timerElement = document.getElementById('timer');
+        const resultElement = document.getElementById('result');
 
-    <div id="bet-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Place Bet on <span id="selected-option"></span></h3>
-            <p>Enter Amount:</p>
-            <input type="number" id="bet-amount" value="10" min="10">
-            <div class="modal-buttons">
-                <button onclick="confirmBet()">Confirm</button>
-                <button onclick="closeModal()" class="cancel">Cancel</button>
-            </div>
-        </div>
-    </div>
+        setInterval(() => {
+            timeLeft--;
+            if (timeLeft < 0) {
+                timeLeft = 30;
+                const colors = ['Green', 'Red', 'Violet'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                resultElement.innerText = "Result: " + randomColor;
+            }
+            timerElement.innerText = "Timer: " + timeLeft + "s";
+        }, 1000);
 
-    <script src="script.js"></script>
+        function bet(color) {
+            alert("You selected: " + color);
+        }
+    </script>
 </body>
 </html>
