@@ -3,49 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Prediction Game</title>
+    <title>Color Prediction & Casino Platform</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #0f172a; color: #fff; text-align: center; padding: 20px; }
-        .container { max-width: 400px; margin: auto; background: #1e293b; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        h1 { color: #38bdf8; font-size: 24px; }
-        .timer { font-size: 20px; margin: 15px 0; color: #facc15; }
-        .result { font-size: 18px; margin: 15px 0; font-weight: bold; }
-        .btn-container { display: flex; justify-content: space-around; margin: 20px 0; }
-        button { padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
-        .btn-green { background: #22c55e; }
-        .btn-red { background: #ef4444; }
-        .btn-violet { background: #a855f7; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #0f172a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 420px; background: #1e293b; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); overflow: hidden; position: relative; }
+        
+        /* Screens */
+        .screen { display: none; padding: 25px; }
+        .screen.active { display: block; }
+
+        /* Auth Screen */
+        .auth-header { text-align: center; margin-bottom: 20px; }
+        .auth-header h1 { color: #38bdf8; font-size: 26px; margin-bottom: 5px; }
+        .bonus-banner { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; padding: 12px; border-radius: 8px; text-align: center; font-size: 14px; font-weight: bold; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 14px; margin-bottom: 5px; color: #94a3b8; }
+        .form-group input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 15px; }
+        .btn-primary { width: 100%; padding: 12px; background: #2563eb; border: none; border-radius: 8px; color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .btn-primary:hover { background: #1d4ed8; }
+
+        /* Dashboard Screen */
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #334155; padding-bottom: 15px; }
+        .wallet-card { background: linear-gradient(135deg, #10b981, #059669); padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+        .wallet-card h3 { font-size: 14px; color: #d1fae5; margin-bottom: 5px; }
+        .wallet-card .balance { font-size: 28px; font-weight: bold; color: #fff; }
+        
+        /* Game Section */
+        .game-box { background: #0f172a; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #334155; }
+        .timer { font-size: 22px; color: #facc15; font-weight: bold; margin: 10px 0; }
+        .result { font-size: 16px; margin: 10px 0; font-weight: bold; color: #38bdf8; }
+        .bet-buttons { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px; }
+        .bet-btn { flex: 1; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; font-size: 14px; }
+        .bg-green { background: #22c55e; }
+        .bg-violet { background: #a855f7; }
+        .bg-red { background: #ef4444; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Color Prediction Game</h1>
-        <div class="timer" id="timer">Timer: 30s</div>
-        <div class="result" id="result">Result: --</div>
-        <div class="btn-container">
-            <button class="btn-green" onclick="bet('Green')">Green</button>
-            <button class="btn-violet" onclick="bet('Violet')">Violet</button>
-            <button class="btn-red" onclick="bet('Red')">Red</button>
+
+    <div class="app-container">
+        <!-- 1. Register / Login Screen -->
+        <div id="authScreen" class="screen active">
+            <div class="auth-header">
+                <h1>Welcome Bonus Portal</h1>
+                <p style="color: #94a3b8; font-size: 13px;">Register now and claim FREE Rs1500 bonus</p>
+            </div>
+            <div class="bonus-banner">
+                🎁 FREE Rs1500 Bonus + 100% First Deposit Offer! 🏆
+            </div>
+            <div class="form-group">
+                <label>Mobile Number / Username</label>
+                <input type="text" id="username" placeholder="Enter mobile number">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            <div class="form-group">
+                <label>Referral Code (Optional)</label>
+                <input type="text" id="referral" value="432865922086" readonly style="color: #facc15;">
+            </div>
+            <button class="btn-primary" onclick="loginUser()">Register & Claim Rs1500</button>
+        </div>
+
+        <!-- 2. Game Dashboard Screen -->
+        <div id="gameScreen" class="screen">
+            <div class="dash-header">
+                <h2>Dashboard</h2>
+                <span id="userDisplay" style="color: #38bdf8; font-size: 14px;"></span>
+            </div>
+            
+            <div class="wallet-card">
+                <h3>Total Balance (Bonus Included)</h3>
+                <div class="balance" id="walletBalance">Rs 1,500.00</div>
+            </div>
+
+            <div class="game-box">
+                <h3 style="color: #f8fafc; margin-bottom: 5px;">Color Prediction Game</h3>
+                <div class="timer" id="timer">00:30</div>
+                <div class="result" id="resultText">Result: Waiting...</div>
+                
+                <div class="bet-buttons">
+                    <button class="bet-btn bg-green" onclick="placeBet('Green')">Green</button>
+                    <button class="bet-btn bg-violet" onclick="placeBet('Violet')">Violet</button>
+                    <button class="bet-btn bg-red" onclick="placeBet('Red')">Red</button>
+                </div>
+            </div>
         </div>
     </div>
+
     <script>
+        function loginUser() {
+            const user = document.getElementById('username').value;
+            if(!user) {
+                alert("Please enter your mobile number or username!");
+                return;
+            }
+            document.getElementById('userDisplay').innerText = user;
+            document.getElementById('authScreen').classList.remove('active');
+            document.getElementById('gameScreen').classList.add('active');
+        }
+
         let timeLeft = 30;
-        const timerElement = document.getElementById('timer');
-        const resultElement = document.getElementById('result');
+        let balance = 1500;
+        const timerEl = document.getElementById('timer');
+        const resultEl = document.getElementById('resultText');
+        const balanceEl = document.getElementById('walletBalance');
 
         setInterval(() => {
             timeLeft--;
-            if (timeLeft < 0) {
+            if(timeLeft < 0) {
                 timeLeft = 30;
                 const colors = ['Green', 'Red', 'Violet'];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                resultElement.innerText = "Result: " + randomColor;
+                const winColor = colors[Math.floor(Math.random() * colors.length)];
+                resultEl.innerText = "Winning Color: " + winColor;
             }
-            timerElement.innerText = "Timer: " + timeLeft + "s";
+            let secs = timeLeft < 10 ? "0" + timeLeft : timeLeft;
+            timerEl.innerText = "00:" + secs;
         }, 1000);
 
-        function bet(color) {
-            alert("You selected: " + color);
+        function placeBet(color) {
+            let amount = 100; // default bet
+            if(balance < amount) {
+                alert("Low balance! Please deposit to continue.");
+                return;
+            }
+            balance -= amount;
+            balanceEl.innerText = "Rs " + balance.toFixed(2);
+            alert("Successfully placed bet of Rs " + amount + " on " + color);
         }
     </script>
 </body>
